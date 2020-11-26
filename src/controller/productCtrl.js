@@ -1,21 +1,19 @@
 const connection = require('../database/connection'); //Importa script de conexão com o banco
-const crypto = require('crypto'); //Pacote do Node 
-//const routes = require('../routes'); //Importa script de Rotas
+const crypto = require('crypto'); //Pacote do Node
 
 module.exports = { //Exporta lógica de negócio das rotas
 
-    async test(req, res){
-        return res.json("Salve, truta! Tudo suave..."); 
+    async test({}, res){
+        return res.json("Salve, truta! Tudo suave em produtos..."); 
     },
 
     async createProduct(req, res){ //Cria novo produto
-        const {tipo, marca, modelo} = req.body; //Atribui o que vem da requisição às variáveis esperadas
+        const {tipo, marca} = req.body; //Atribui o que vem da requisição às variáveis esperadas
         const id = crypto.randomBytes(4).toString('hex'); //Gera arquivo de 4 bytes e transforma em string no formato hexadecimal
         await connection('products').insert({ //Insere na tabela products os dados obtidos
             id, 
             tipo, 
-            marca, 
-            modelo
+            marca,
         });
         return res.json({id}); //Responde com o id (como objeto) caso dê tudo certo
     },
@@ -33,12 +31,11 @@ module.exports = { //Exporta lógica de negócio das rotas
 
     async updateProduct(req, res){ //Atualiza um produto pelo id
         const {id} = req.params; //Atribui ao objeto o id recebido pelo parâmetro da requisição 
-        const {tipo, marca, modelo} = req.body; //Atribui o que vem da requisição às variáveis esperadas
+        const {tipo, marca} = req.body; //Atribui o que vem da requisição às variáveis esperadas
         await connection('products').where('id', id).update({ //Atualiza na tabela products os dados obtidos
             id, 
             tipo,  
-            marca, 
-            modelo
+            marca
         }); 
         return res.status(204).send(); //Responde com o status de sucesso sem contexto
     },
@@ -47,6 +44,6 @@ module.exports = { //Exporta lógica de negócio das rotas
         const {id} = req.params;
         await connection('products').where('id', id).delete(); //Deleta o produto da tabela
         return res.status(204).send(); //Responde com o status de sucesso sem contexto
-        //return res.status(200).send("Usuário" + id + "deletado com sucessso!"); //Responde com o status de sucesso sem contexto
+        //return res.status(200).send("Produto " + id + "deletado com sucessso!"); //Responde com o status de sucesso sem contexto
     }
 }
