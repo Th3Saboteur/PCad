@@ -1,16 +1,8 @@
 const express = require('express'); //Importa express
 const routes = express.Router(); //Extrai apenas as rotas do express
-const productCtrl = require('./controller/productCtrl'); //Importa controlador para acesso ao banco (script)
 const userCtrl = require('./controller/userCtrl'); //Importa controlador para acesso ao banco (script)
 const adCtrl = require('./controller/adCtrl'); //Importa controlador para acesso ao banco (script)
 const cartCtrl = require('./controller/cartCtrl'); //Importa controlador para acesso ao banco (script)
-
-routes.get('/products', productCtrl.test);
-routes.post('/products/create', productCtrl.createProduct); //Chama a função do controlador para a rota 
-routes.get('/products/list', productCtrl.listProducts); //Chama a função do controlador para a rota    
-routes.get('/products/show/:id', productCtrl.showProduct); //Chama a função do controlador para a rota  
-routes.put('/products/update/:id', productCtrl.updateProduct); //Chama a função do controlador para a rota 
-routes.delete('/products/delete/:id', productCtrl.deleteProduct); //Chama a função do controlador para a rota
 
 routes.get('/users', userCtrl.test);
 routes.post('/users/create', userCtrl.createUser); //Chama a função do controlador para a rota 

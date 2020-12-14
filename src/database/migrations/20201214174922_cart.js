@@ -1,4 +1,3 @@
-
 exports.up = function(knex) {
     return knex.schema.createTable('carts', function (table) { //Cria a Tabela
         table.string('user').notNullable();

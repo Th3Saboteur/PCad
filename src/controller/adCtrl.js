@@ -8,12 +8,13 @@ module.exports = { //Exporta lógica de negócio das rotas
     }, 
 
     async createAd(req, res){ //Cria novo anúncio
-        const {user, product, info, price, desc} = req.body; //Atribui o que vem da requisição às variáveis esperadas
+        const {user, tipo, marca, info, price, desc} = req.body; //Atribui o que vem da requisição às variáveis esperadas
         const id = crypto.randomBytes(4).toString('hex'); //Gera arquivo de 4 bytes e transforma em string no formato hexadecimal
         await connection('ads').insert({ //Insere na tabela ads os dados obtidos
             id, 
             user, 
-            product, 
+            tipo,
+            marca, 
             info, 
             price, 
             desc
@@ -22,12 +23,11 @@ module.exports = { //Exporta lógica de negócio das rotas
     },
 
     async listAds(req, res){ //Lista todos os anúncios
-        const ads = await connection('ads').innerJoin('users', 'ads.user', 'users.id')
-        .innerJoin('products', 'ads.product', 'products.id').select(
+        const ads = await connection('ads').innerJoin('users', 'ads.user', 'users.id').select(
             'ads.id',
             'users.nome', 
-            'products.tipo',
-            'products.marca',
+            'ads.tipo',
+            'ads.marca',
             'ads.info', 
             'ads.price', 
             'ads.desc'
@@ -38,11 +38,11 @@ module.exports = { //Exporta lógica de negócio das rotas
     async showAd(req, res){ //Mostra um anúncio pelo id
         const {id} = req.params; //Atribui ao objeto o id recebido pelo parâmetro da requisição 
         const ad = await connection('ads').where('ads.id', id).innerJoin('users', 'ads.user', 'users.id')
-        .innerJoin('products', 'ads.product', 'products.id').select(
+        .select(
             'ads.id',
             'users.nome', 
-            'products.tipo',
-            'products.marca',
+            'ads.tipo',
+            'ads.marca',
             'ads.info', 
             'ads.price', 
             'ads.desc'
@@ -52,9 +52,10 @@ module.exports = { //Exporta lógica de negócio das rotas
 
     async updateAd(req, res){ //Atualiza um anúncio pelo id
         const {id} = req.params; //Atribui ao objeto o id recebido pelo parâmetro da requisição 
-        const {product, info, price, desc} = req.body; //Atribui o que vem da requisição às variáveis esperadas
+        const {tipo, marca, info, price, desc} = req.body; //Atribui o que vem da requisição às variáveis esperadas
         await connection('ads').where('id', id).update({ //Atualiza na tabela ads os dados obtidos
-            'product': product, 
+            'tipo': tipo,
+            'marca': marca,
             'info': info, 
             'price': price, 
             'desc': desc
@@ -66,13 +67,13 @@ module.exports = { //Exporta lógica de negócio das rotas
         const {id} = req.params;
         await connection('ads').where('id', id).delete(); //Deleta o anúncio da tabela
         return res.status(204).send(); //Responde com o status de sucesso sem contexto
-        //return res.status(200).send("Usuário" + id + "deletado com sucessso!"); //Responde com o status de sucesso sem contexto
     },
 
     async searchAds(req, res){
         const {tag} = req.params;
         const search = '%' + tag.toString() + '%'; 
-        const ads = await connection('ads').where('info', 'like', search).select('*');
+        const ads = await connection('ads').where('tipo', 'like', search, 'or',
+        'marca', 'like', search, 'or', 'info', 'like', search).select('*');
         console.log(ads.length);
         return res.json(ads);
     } 

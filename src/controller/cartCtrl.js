@@ -18,13 +18,13 @@ module.exports = { //Exporta lógica de negócio das rotas
     async listCarts(req, res){ 
         const {user} = req.params;
         const carts = await connection('carts').innerJoin('users', 'carts.user', 'users.id')
-        .innerJoin('ads', 'carts.ad', 'ads.id').innerJoin('products', 'ads.product', 'products.id').
+        .innerJoin('ads', 'carts.ad', 'ads.id').
         where('carts.user', '=', user).select(
             'carts.user',
             'carts.ad',
             'users.nome as vendedor', 
-            'products.tipo',
-            'products.marca',
+            'ads.tipo',
+            'ads.marca',
             'ads.info', 
             'ads.price', 
             'ads.desc'

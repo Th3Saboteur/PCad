@@ -1,4 +1,3 @@
-
 exports.up = function(knex) { //Para quando executar a migrations
     return knex.schema.createTable('users', function (table) { //Cria a Tabela
         table.string('id').primary();
