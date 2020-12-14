@@ -46,4 +46,5 @@ module.exports = { //Exporta lógica de negócio das rotas
         return res.status(204).send(); //Responde com o status de sucesso sem contexto
         //return res.status(200).send("Produto " + id + "deletado com sucessso!"); //Responde com o status de sucesso sem contexto
     }
+
 }

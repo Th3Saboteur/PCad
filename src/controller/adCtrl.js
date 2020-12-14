@@ -22,7 +22,16 @@ module.exports = { //Exporta lógica de negócio das rotas
     },
 
     async listAds(req, res){ //Lista todos os anúncios
-        const ads = await connection('ads').select('*'); //Seleciona todas tuplas da tabela ads
+        const ads = await connection('ads').innerJoin('users', 'ads.user', 'users.id')
+        .innerJoin('products', 'ads.product', 'products.id').select(
+            'ads.id',
+            'users.nome', 
+            'products.tipo',
+            'products.marca',
+            'ads.info', 
+            'ads.price', 
+            'ads.desc'
+        );
         return res.json(ads); //Responde com os anúncios
     },
 
@@ -58,6 +67,14 @@ module.exports = { //Exporta lógica de negócio das rotas
         await connection('ads').where('id', id).delete(); //Deleta o anúncio da tabela
         return res.status(204).send(); //Responde com o status de sucesso sem contexto
         //return res.status(200).send("Usuário" + id + "deletado com sucessso!"); //Responde com o status de sucesso sem contexto
-    }
+    },
+
+    async searchAds(req, res){
+        const {tag} = req.params;
+        const search = '%' + tag.toString() + '%'; 
+        const ads = await connection('ads').where('info', 'like', search).select('*');
+        console.log(ads.length);
+        return res.json(ads);
+    } 
 
 }

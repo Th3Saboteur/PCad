@@ -3,6 +3,7 @@ const routes = express.Router(); //Extrai apenas as rotas do express
 const productCtrl = require('./controller/productCtrl'); //Importa controlador para acesso ao banco (script)
 const userCtrl = require('./controller/userCtrl'); //Importa controlador para acesso ao banco (script)
 const adCtrl = require('./controller/adCtrl'); //Importa controlador para acesso ao banco (script)
+const cartCtrl = require('./controller/cartCtrl'); //Importa controlador para acesso ao banco (script)
 
 routes.get('/products', productCtrl.test);
 routes.post('/products/create', productCtrl.createProduct); //Chama a função do controlador para a rota 
@@ -24,5 +25,12 @@ routes.get('/ads/list', adCtrl.listAds); //Chama a função do controlador para 
 routes.get('/ads/show/:id', adCtrl.showAd); //Chama a função do controlador para a rota  
 routes.put('/ads/update/:id', adCtrl.updateAd); //Chama a função do controlador para a rota 
 routes.delete('/ads/delete/:id', adCtrl.deleteAd); //Chama a função do controlador para a rota
+routes.get('/ads/search/:tag', adCtrl.searchAds); //Chama a função do controlador para a rota
+
+routes.get('/carts', cartCtrl.test);
+routes.post('/carts/create', cartCtrl.createCart); //Chama a função do controlador para a rota 
+routes.get('/carts/list/:user', cartCtrl.listCarts); //Chama a função do controlador para a rota
+routes.delete('/carts/delete/:user/:ad', cartCtrl.deleteCart); //Chama a função do controlador para a rota    
+routes.delete('/carts/delete/:user', cartCtrl.deleteAllCarts); //Chama a função do controlador para a rota  
 
 module.exports = routes; //Exporta variável routes (com as rotas) para acesso externo
