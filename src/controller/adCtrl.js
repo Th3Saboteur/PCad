@@ -70,12 +70,34 @@ module.exports = { //Exporta lógica de negócio das rotas
     },
 
     async searchAds(req, res){
-        const {tag} = req.params;
+        const {campo, tag} = req.params;
         const search = '%' + tag.toString() + '%'; 
-        const ads = await connection('ads').where('tipo', 'like', search, 'or',
-        'marca', 'like', search, 'or', 'info', 'like', search).select('*');
-        console.log(ads.length);
+        const ads = await connection('ads').innerJoin('users', 'ads.user', 'users.id').
+        where(campo, 'like', search)
+        .select(
+            'ads.id',
+            'users.nome as vendedor', 
+            'ads.tipo',
+            'ads.marca',
+            'ads.info', 
+            'ads.price', 
+            'ads.desc'
+        );
+        //if(ads.length === 0) return res.status(404).send();
         return res.json(ads);
-    } 
+    },
+
+    async newsAds(req, res){
+        const ads = await connection('ads').innerJoin('users', 'ads.user', 'users.id').select(
+            'ads.id',
+            'users.nome', 
+            'ads.tipo',
+            'ads.marca',
+            'ads.info', 
+            'ads.price', 
+            'ads.desc'
+        ).limit(3);
+        return res.json(ads);
+    }
 
 }

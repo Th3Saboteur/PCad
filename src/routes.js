@@ -17,7 +17,8 @@ routes.get('/ads/list', adCtrl.listAds); //Chama a função do controlador para 
 routes.get('/ads/show/:id', adCtrl.showAd); //Chama a função do controlador para a rota  
 routes.put('/ads/update/:id', adCtrl.updateAd); //Chama a função do controlador para a rota 
 routes.delete('/ads/delete/:id', adCtrl.deleteAd); //Chama a função do controlador para a rota
-routes.get('/ads/search/:tag', adCtrl.searchAds); //Chama a função do controlador para a rota
+routes.get('/ads/search/:campo/:tag', adCtrl.searchAds); //Chama a função do controlador para a rota
+routes.get('/ads/news', adCtrl.newsAds);//Chama a função do controlador para a rota
 
 routes.get('/carts', cartCtrl.test);
 routes.post('/carts/create', cartCtrl.createCart); //Chama a função do controlador para a rota 
